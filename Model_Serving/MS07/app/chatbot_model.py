@@ -56,10 +56,13 @@ class ChatbotModel:
                 input_ids,
                 max_new_tokens=max_new_tokens,             # *your code* — 생성 파라미터
                 temperature=temperature,
+                repetition_penalty=1.5,        # 동일한 토큰이 나타날 확률을 강제로 낮춤 (1.2 ~ 1.5 권장)
+                no_repeat_ngram_size=2,        # 2개 이상의 단어가 똑같이 반복되는 것을 금지
                 top_k=top_k,
                 top_p=top_p,
                 do_sample=True,
-                pad_token_id=self.tokenizer.eos_token_id,
+                pad_token_id=self.tokenizer.pad_token_id,
+                eos_token_id=self.tokenizer.eos_token_id, # 문장이 끝나면(EOS) 즉시 멈춤
             )
 
         # 디코딩: 생성된 부분만 추출

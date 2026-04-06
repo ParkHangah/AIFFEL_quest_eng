@@ -124,7 +124,16 @@ if user_input:
 
         # 5-3. 응답 결과 처리
         if result and result.get("success"):
-            bot_response = result["response"]
+            raw_response = result["response"]
+
+            # [수정] 줄바꿈(\n)이 있으면 첫 번째 줄만 선택하고, 
+            # 양쪽 공백과 불필요한 마침표를 제거합니다.
+            bot_response = raw_response.split('\n')[0].strip()
+
+            # 만약 "로보:" 같은 접두어가 붙어 나온다면 그것도 제거
+            if ":" in bot_response:
+                bot_response = bot_response.split(":")[-1].strip()
+                
             st.write(bot_response)
 
             # 봇 응답을 대화 기록에 추가
