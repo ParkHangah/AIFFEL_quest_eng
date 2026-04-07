@@ -7,6 +7,27 @@ import requests
 # [API 엔드포인트 설정]
 API_URL = "http://localhost:8000/predict"
 
+# ---------------------------------------------------------
+# [새로 추가할 전처리 함수]
+# ---------------------------------------------------------
+def sanitize_for_json(text: str) -> str:
+    """
+    텍스트의 스마트 따옴표를 표준으로 정제하고, 
+    데이터 파이프라인 오류를 방지하기 위한 전처리를 수행합니다.
+    """
+    if not text:
+        return text
+
+    # 1. 스마트 따옴표 및 백틱을 일반 작은/큰따옴표로 변환
+    quote_map = str.maketrans("‘’`“”", "'''\"\"")
+    cleaned_text = text.translate(quote_map)
+
+    # 2. 눈에 보이지 않는 Null 바이트(\x00) 등 치명적인 제어 문자 제거
+    # (일반적인 줄바꿈(\n)은 백엔드 chunking 로직에서 필요하므로 그대로 보존합니다)
+    cleaned_text = cleaned_text.replace('\x00', '')
+
+    return cleaned_text
+
 # [세션 상태(Session State) 초기화]
 if "temp_text" not in st.session_state:
     st.session_state["temp_text"] = ""
@@ -48,18 +69,22 @@ def analyze_text(title, text):
     if not api_key:
         st.warning("우측 사이드바에 API Key를 입력해주세요.")
         return
-    
+    # 💡 [핵심 추가] API 요청 전 데이터 정제(Sanitization) 실행
+
+    sanitized_title = sanitize_for_json(title)
+    sanitized_text = sanitize_for_json(text)
+
     with st.spinner("번역 및 키워드 추출을 진행 중입니다..."):
         headers = {"X-API-Key": api_key}
-        payload = {"title": title, "text": text}
+        payload = {"title": sanitized_title, "text": sanitized_text}
         try:
             response = requests.post(API_URL, json=payload, headers=headers)
             response.raise_for_status()
             
             # 결과 저장 및 히스토리 업데이트
             st.session_state["api_result"] = response.json()
-            if title not in st.session_state["history_works"]:
-                st.session_state["history_works"].append(title)
+            if sanitized_title not in st.session_state["history_works"]:
+                st.session_state["history_works"].append(sanitized_title)
                 
             st.success("분석이 완료되었습니다!")
         except requests.exceptions.HTTPError as e:
