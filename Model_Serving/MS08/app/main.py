@@ -23,6 +23,10 @@ inference_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="infer
 
 # 전역 모델 변수
 pipeline_models = None
+ # 1. root 추가
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to Global Narrative to Tag API!"}
 
 # 2. startup 이벤트에서 모델 로드
 @app.on_event("startup")
