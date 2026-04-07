@@ -1,0 +1,30 @@
+# ===== Core =====
+# 1. PyTorch 보안 이슈(CVE-2025-32434) 해결을 위해 2.6.0 이상 강제
+torch>=2.6.0
+torchvision>=0.16.0
+
+# ===== LLM & Quantization =====
+# 2. bitsandbytes 0.44.1과 완벽히 호환되며 번역 파이프라인이 안정적인 버전으로 고정
+transformers==4.44.2
+accelerate
+# 3. Colab CUDA 12.x 환경과의 충돌(libnvJitLink.so.13 에러) 방지
+bitsandbytes==0.44.1
+
+# ===== Translation & Tokenization =====
+sentencepiece
+protobuf
+sacremoses         # 4. Helsinki-NLP 번역 파이프라인(MarianMT) 필수 의존성 추가
+
+# ===== API =====
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+pydantic>=2.0.0,<3.0.0
+
+# ===== Frontend =====
+streamlit==1.38.0
+
+# ===== Utilities =====
+nest-asyncio
+requests>=2.31.0,<3.0.0
+pillow>=10.0.0
+python-multipart>=0.0.6
