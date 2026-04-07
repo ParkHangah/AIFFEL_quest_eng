@@ -160,8 +160,12 @@ if st.session_state["api_result"]:
 
     # 작품 키워드 출력 (출력 형태에 따라 분기)
     st.subheader("🔑 작품 핵심 키워드")
-    top_orig_kw = result["keyword"] if len(result["keyword"]) > 0 else []
-    top_trans_kw = result["keyword"][7] if len(result["keyword"]) > 1 else []
+    # keyword 필드가 존재하고 데이터가 있을 때만 처리
+    all_keywords = result.get("keyword", [])
+    
+    # 인덱스 0은 원문(KOR), 인덱스 1은 번역본(ENG) 키워드 리스트입니다.
+    top_orig_kw = all_keywords[0] if len(all_keywords) > 0 else []
+    top_trans_kw = all_keywords[1] if len(all_keywords) > 1 else [] # <--- [1]로 수정!
     
     if view_option == "원문보기":
         st.write(f"**원문 키워드:** {', '.join(top_orig_kw)}")
@@ -214,19 +218,18 @@ if st.session_state["api_result"]:
     
     for para in result["data"]:
         html_out += '<section class="paragraph">'
-        
+
+        # 💡 문단 레벨에서 타입 가져오기
+        p_type = para.get("paragraph_type", 0)
+        # 클래스 맵핑 (이제 문단 전체가 동일한 스타일을 가질 수도 있고, 
+        # 혹은 이전처럼 개별 문장에 스타일을 줄 수도 있습니다.)
+        if p_type == 1: p_class = "dialogue"
+        elif p_type == 2: p_class = "thought"
+        else: p_class = "normal"
+
         for sent in para["sentences"]:
-            s_type = sent["sentence_type"]
             orig_text = sent["original_text"]
             trans_text = sent.get("translated_text", "")
-            
-            # 클래스 맵핑
-            if s_type == 1:
-                p_class = "dialogue"
-            elif s_type == 2:
-                p_class = "thought"
-            else:
-                p_class = "normal"
             
             # 표시 내용 분기
             if view_option == "원문보기":

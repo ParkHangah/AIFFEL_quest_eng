@@ -1,0 +1,131 @@
+{
+  "title": "길을 잃은 작은 도깨비",
+  "origin_txt": "data/user01/20260408011920618.txt",
+  "keyword": [
+    [
+      "츤데레",
+      "회귀",
+      "미스터리",
+      "두뇌싸움",
+      "마법"
+    ],
+    [
+      "Mystery",
+      "Angst",
+      "Misunderstanding",
+      "Psychological",
+      "Martial Arts"
+    ]
+  ],
+  "data": [
+    [
+      0,
+      [
+        [
+          "옛날 어느 숲 속 깊은 곳에 길이 있었어요.",
+          "There was a road deep in the forest."
+        ],
+        [
+          "작은 도깨비가 길을 잃고 나무 밑에 앉아 있었죠.",
+          "The little grasshopper was lost, sitting under a tree."
+        ]
+      ],
+      [
+        [
+          "역사",
+          "츤데레",
+          "회귀"
+        ],
+        [
+          "Mystery",
+          "Martial Arts",
+          "Angst"
+        ]
+      ]
+    ],
+    [
+      1,
+      [
+        [
+          "\"집으로 가는 길은 왜 이렇게 복잡한 거야?\".",
+          "\"Why is the road home so complicated?\""
+        ]
+      ],
+      [
+        [
+          "회귀",
+          "미스터리",
+          "두뇌싸움"
+        ],
+        [
+          "Mystery",
+          "Misunderstanding",
+          "Psychological"
+        ]
+      ]
+    ],
+    [
+      0,
+      [
+        [
+          "도깨비는 어두워지는 하늘을 보며 눈물을 찔끔 흘렸어요.",
+          "And she was crying as she looked into the dark sky."
+        ]
+      ],
+      [
+        [
+          "후회",
+          "마법",
+          "츤데레"
+        ],
+        [
+          "Angst",
+          "Solid Emotional Line",
+          "Misunderstanding"
+        ]
+      ]
+    ],
+    [
+      2,
+      [
+        [
+          "'혹시 무서운 호랑이가 나타나면 어떡하지?'.",
+          "'What if there's a scary tiger?'"
+        ]
+      ],
+      [
+        [
+          "미스터리",
+          "두뇌싸움",
+          "코믹"
+        ],
+        [
+          "Mystery",
+          "Misunderstanding",
+          "Angst"
+        ]
+      ]
+    ],
+    [
+      0,
+      [
+        [
+          "그때, 멀리서  등불 빛이 나타났어요.",
+          "Then, a light came out of the distance."
+        ]
+      ],
+      [
+        [
+          "반전",
+          "인외존재",
+          "마법"
+        ],
+        [
+          "Mystery",
+          "Healing",
+          "Psychological"
+        ]
+      ]
+    ]
+  ]
+}
