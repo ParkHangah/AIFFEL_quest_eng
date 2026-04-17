@@ -1,43 +1,96 @@
-# AIFFEL Campus Online Code Peer Review Templete
-- 코더 : 코더의 이름을 작성하세요.
-- 리뷰어 : 리뷰어의 이름을 작성하세요.
+# MLOps Node4. AirFlow
+2026.04.16 ~ 04.17 
 
-
-# PRT(Peer Review Template)
-- [ ]  **1. 주어진 문제를 해결하는 완성된 코드가 제출되었나요?**
-    - 문제에서 요구하는 최종 결과물이 첨부되었는지 확인
-        - 중요! 해당 조건을 만족하는 부분을 캡쳐해 근거로 첨부
-    
-- [ ]  **2. 전체 코드에서 가장 핵심적이거나 가장 복잡하고 이해하기 어려운 부분에 작성된 
-주석 또는 doc string을 보고 해당 코드가 잘 이해되었나요?**
-    - 해당 코드 블럭을 왜 핵심적이라고 생각하는지 확인
-    - 해당 코드 블럭에 doc string/annotation이 달려 있는지 확인
-    - 해당 코드의 기능, 존재 이유, 작동 원리 등을 기술했는지 확인
-    - 주석을 보고 코드 이해가 잘 되었는지 확인
-        - 중요! 잘 작성되었다고 생각되는 부분을 캡쳐해 근거로 첨부
-        
-- [ ]  **3. 에러가 난 부분을 디버깅하여 문제를 해결한 기록을 남겼거나
-새로운 시도 또는 추가 실험을 수행해봤나요?**
-    - 문제 원인 및 해결 과정을 잘 기록하였는지 확인
-    - 프로젝트 평가 기준에 더해 추가적으로 수행한 나만의 시도, 
-    실험이 기록되어 있는지 확인
-        - 중요! 잘 작성되었다고 생각되는 부분을 캡쳐해 근거로 첨부
-        
-- [ ]  **4. 회고를 잘 작성했나요?**
-    - 주어진 문제를 해결하는 완성된 코드 내지 프로젝트 결과물에 대해
-    배운점과 아쉬운점, 느낀점 등이 기록되어 있는지 확인
-    - 전체 코드 실행 플로우를 그래프로 그려서 이해를 돕고 있는지 확인
-        - 중요! 잘 작성되었다고 생각되는 부분을 캡쳐해 근거로 첨부
-        
-- [ ]  **5. 코드가 간결하고 효율적인가요?**
-    - 파이썬 스타일 가이드 (PEP8) 를 준수하였는지 확인
-    - 코드 중복을 최소화하고 범용적으로 사용할 수 있도록 함수화/모듈화했는지 확인
-        - 중요! 잘 작성되었다고 생각되는 부분을 캡쳐해 근거로 첨부
-
-
-# 회고(참고 링크 및 코드 개선)
+## Airflow 구성 1
+### 🚨"Invalid key JSON 에러 해결
+- 터미널을 통해 key를 발급하여 사용
+1. GCP CLI 설치
 ```
-# 리뷰어의 회고를 작성합니다.
-# 코드 리뷰 시 참고한 링크가 있다면 링크와 간략한 설명을 첨부합니다.
-# 코드 리뷰를 통해 개선한 코드가 있다면 코드와 간략한 설명을 첨부합니다.
+# 1. 파일 다운로드 (URL 주위에 < > 를 뺐습니다) 
+Invoke-WebRequest -Uri "https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe" -OutFile "$env:Temp\GoogleCloudSDKInstaller.exe"
+# 2. 설치 관리자 실행 
+Start-Process "$env:Temp\GoogleCloudSDKInstaller.exe" -Wait
 ```
+2. ADC 인증 처리
+```
+gcloud auth application-default set-quota-project [프로젝트ID]
+```
+3. 서비스 계정 키(JSON) 발급
+```
+# 서비스 계정확인하기
+gcloud iam service-accounts list
+````
+```
+# 이미있는 서비스 계정으로 키 발급받기
+gcloud iam service-accounts keys create my-key.json --iam-account=[서비스계정명]@[프로젝트ID].iam.gserviceaccount.com
+```
+```
+# 권한 한번더 확인하기
+gcloud projects add-iam-policy-binding sandbox-493404 --member="serviceAccount:mlops-airflow@sandbox-493404.iam.gserviceaccount.com" --role="roles/bigquery.admin"
+```
+4. Airflow 자원정리
+```
+docker compose down --volumes --rmi all
+```
+5. Airflow 실행
+```
+docker compose up -d
+```
+### 작동화면
+<img width="997" height="458" alt="image" src="https://github.com/user-attachments/assets/210ff09e-e7dd-4b7a-b535-7de05f7a67a2" />
+### Log 기록
+```
+644900c573cd
+*** Found local files:
+***   * /opt/airflow/logs/dag_id=bigquery_airflow_example/run_id=scheduled__2026-04-16T00:00:00+00:00/task_id=bq_query_example/attempt=2.log
+[2026-04-17, 07:41:44 UTC] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bigquery_airflow_example.bq_query_example scheduled__2026-04-16T00:00:00+00:00 [queued]>
+[2026-04-17, 07:41:44 UTC] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bigquery_airflow_example.bq_query_example scheduled__2026-04-16T00:00:00+00:00 [queued]>
+[2026-04-17, 07:41:44 UTC] {taskinstance.py:2193} INFO - Starting attempt 2 of 2
+[2026-04-17, 07:41:44 UTC] {taskinstance.py:2217} INFO - Executing <Task(BigQueryExecuteQueryOperator): bq_query_example> on 2026-04-16 00:00:00+00:00
+[2026-04-17, 07:41:44 UTC] {standard_task_runner.py:60} INFO - Started process 256 to run task
+[2026-04-17, 07:41:44 UTC] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'bigquery_***_example', 'bq_query_example', 'scheduled__2026-04-16T00:00:00+00:00', '--job-id', '4', '--raw', '--subdir', 'DAGS_FOLDER/bigquery_***_example.py', '--cfg-path', '/tmp/tmpl3m3tfb9']
+[2026-04-17, 07:41:44 UTC] {standard_task_runner.py:88} INFO - Job 4: Subtask bq_query_example
+[2026-04-17, 07:41:45 UTC] {task_command.py:423} INFO - Running <TaskInstance: bigquery_airflow_example.bq_query_example scheduled__2026-04-16T00:00:00+00:00 [running]> on host c7bf9689cce4
+[2026-04-17, 07:41:45 UTC] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='bigquery_***_example' AIRFLOW_CTX_TASK_ID='bq_query_example' AIRFLOW_CTX_EXECUTION_DATE='2026-04-16T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-04-16T00:00:00+00:00'
+[2026-04-17, 07:41:45 UTC] {bigquery.py:1246} INFO - Executing: SELECT * FROM `bigquery-public-data.samples.github_nested`
+[2026-04-17, 07:41:45 UTC] {taskinstance.py:2731} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/google/cloud/operators/bigquery.py", line 1247, in execute
+    self.hook = BigQueryHook(
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/google/cloud/hooks/bigquery.py", line 119, in __init__
+    super().__init__(
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/google/common/hooks/base_google.py", line 251, in __init__
+    self.extras: dict = self.get_connection(self.gcp_conn_id).extra_dejson
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/hooks/base.py", line 82, in get_connection
+    conn = Connection.get_connection_from_secrets(conn_id)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/connection.py", line 514, in get_connection_from_secrets
+    raise AirflowNotFoundException(f"The conn_id `{conn_id}` isn't defined")
+airflow.exceptions.AirflowNotFoundException: The conn_id `google_cloud_default` isn't defined
+[2026-04-17, 07:41:45 UTC] {taskinstance.py:1149} INFO - Marking task as FAILED. dag_id=bigquery_***_example, task_id=bq_query_example, execution_date=20260416T000000, start_date=20260417T074144, end_date=20260417T074145
+[2026-04-17, 07:41:45 UTC] {standard_task_runner.py:107} ERROR - Failed to execute job 4 for task bq_query_example (The conn_id `google_cloud_default` isn't defined; 256)
+[2026-04-17, 07:41:45 UTC] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2026-04-17, 07:41:46 UTC] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-04-17, 09:38:50 UTC] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bigquery_airflow_example.bq_query_example scheduled__2026-04-16T00:00:00+00:00 [queued]>
+[2026-04-17, 09:38:50 UTC] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bigquery_airflow_example.bq_query_example scheduled__2026-04-16T00:00:00+00:00 [queued]>
+[2026-04-17, 09:38:50 UTC] {taskinstance.py:2193} INFO - Starting attempt 2 of 2
+[2026-04-17, 09:38:50 UTC] {taskinstance.py:2217} INFO - Executing <Task(BigQueryExecuteQueryOperator): bq_query_example> on 2026-04-16 00:00:00+00:00
+[2026-04-17, 09:38:50 UTC] {standard_task_runner.py:60} INFO - Started process 250 to run task
+[2026-04-17, 09:38:50 UTC] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'bigquery_***_example', 'bq_query_example', 'scheduled__2026-04-16T00:00:00+00:00', '--job-id', '4', '--raw', '--subdir', 'DAGS_FOLDER/bigquery_***_example.py', '--cfg-path', '/tmp/tmppv9b1hzi']
+[2026-04-17, 09:38:50 UTC] {standard_task_runner.py:88} INFO - Job 4: Subtask bq_query_example
+[2026-04-17, 09:38:50 UTC] {task_command.py:423} INFO - Running <TaskInstance: bigquery_airflow_example.bq_query_example scheduled__2026-04-16T00:00:00+00:00 [running]> on host 644900c573cd
+[2026-04-17, 09:38:50 UTC] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='bigquery_***_example' AIRFLOW_CTX_TASK_ID='bq_query_example' AIRFLOW_CTX_EXECUTION_DATE='2026-04-16T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-04-16T00:00:00+00:00'
+[2026-04-17, 09:38:50 UTC] {bigquery.py:1246} INFO - Executing: SELECT * FROM `bigquery-public-data.samples.github_nested`
+[2026-04-17, 09:38:50 UTC] {connection.py:269} WARNING - Connection schemes (type: google_cloud_platform) shall not contain '_' according to RFC3986.
+[2026-04-17, 09:38:50 UTC] {base.py:83} INFO - Using connection ID 'google_cloud_default' for task execution.
+[2026-04-17, 09:38:50 UTC] {warnings.py:109} WARNING - /home/***/.local/lib/python3.8/site-packages/***/providers/google/cloud/operators/bigquery.py:1254: AirflowProviderDeprecationWarning: Call to deprecated method run_query. (Please use `***.providers.google.cloud.hooks.bigquery.BigQueryHook.insert_job`)
+  self.job_id = self.hook.run_query(
+[2026-04-17, 09:38:50 UTC] {bigquery.py:1613} INFO - Inserting job ***_1776418730534996_74851c736774c59bb5b34fb9d7ee3746
+[2026-04-17, 09:39:04 UTC] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=bigquery_***_example, task_id=bq_query_example, execution_date=20260416T000000, start_date=20260417T093850, end_date=20260417T093904
+[2026-04-17, 09:39:04 UTC] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-04-17, 09:39:04 UTC] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check
+```
+
