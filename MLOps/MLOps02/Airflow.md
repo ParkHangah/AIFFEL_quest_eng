@@ -39,7 +39,9 @@ docker compose up -d
 ### 작동화면
 <img width="997" height="458" alt="image" src="https://github.com/user-attachments/assets/210ff09e-e7dd-4b7a-b535-7de05f7a67a2" />
 ### Log 기록
+
 ```
+
 644900c573cd
 *** Found local files:
 ***   * /opt/airflow/logs/dag_id=bigquery_airflow_example/run_id=scheduled__2026-04-16T00:00:00+00:00/task_id=bq_query_example/attempt=2.log
@@ -92,5 +94,6 @@ airflow.exceptions.AirflowNotFoundException: The conn_id `google_cloud_default` 
 [2026-04-17, 09:39:04 UTC] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=bigquery_***_example, task_id=bq_query_example, execution_date=20260416T000000, start_date=20260417T093850, end_date=20260417T093904
 [2026-04-17, 09:39:04 UTC] {local_task_job_runner.py:234} INFO - Task exited with return code 0
 [2026-04-17, 09:39:04 UTC] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check
+
 ```
 
