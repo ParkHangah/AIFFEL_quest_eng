@@ -1,7 +1,7 @@
 # MLOps Node4. AirFlow
 2026.04.16 ~ 04.17 
 
-## Airflow 구성 1
+## Airflow 구성 1 : bigquery_airflow_example
 ### 🚨"Invalid key JSON 에러 해결
 - 터미널을 통해 key를 발급하여 사용
 1. GCP CLI 설치
@@ -96,4 +96,56 @@ airflow.exceptions.AirflowNotFoundException: The conn_id `google_cloud_default` 
 [2026-04-17, 09:39:04 UTC] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check
 
 ```
+
+## Airflow 구성 2 : bigquery_to_huggingface
+<img width="1260" height="754" alt="image" src="https://github.com/user-attachments/assets/7ed7beda-cd85-4a9e-9cda-737ccd207188" />
+
+### Log : bigquery_to_gcs
+```
+
+95f4b167fafc
+*** Found local files:
+***   * /opt/airflow/logs/dag_id=bigquery_to_huggingface/run_id=manual__2026-04-17T10:28:30.373404+00:00/task_id=bigquery_to_gcs/attempt=1.log
+[2026-04-17, 10:28:36 UTC] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bigquery_to_huggingface.bigquery_to_gcs manual__2026-04-17T10:28:30.373404+00:00 [queued]>
+[2026-04-17, 10:28:36 UTC] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bigquery_to_huggingface.bigquery_to_gcs manual__2026-04-17T10:28:30.373404+00:00 [queued]>
+[2026-04-17, 10:28:36 UTC] {taskinstance.py:2193} INFO - Starting attempt 1 of 1
+[2026-04-17, 10:28:36 UTC] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): bigquery_to_gcs> on 2026-04-17 10:28:30.373404+00:00
+[2026-04-17, 10:28:36 UTC] {standard_task_runner.py:60} INFO - Started process 406 to run task
+[2026-04-17, 10:28:36 UTC] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'bigquery_to_huggingface', 'bigquery_to_gcs', 'manual__2026-04-17T10:28:30.373404+00:00', '--job-id', '12', '--raw', '--subdir', 'DAGS_FOLDER/bigquery_to_huggingface.py', '--cfg-path', '/tmp/tmpajslhf2d']
+[2026-04-17, 10:28:36 UTC] {standard_task_runner.py:88} INFO - Job 12: Subtask bigquery_to_gcs
+[2026-04-17, 10:28:36 UTC] {task_command.py:423} INFO - Running <TaskInstance: bigquery_to_huggingface.bigquery_to_gcs manual__2026-04-17T10:28:30.373404+00:00 [running]> on host 95f4b167fafc
+[2026-04-17, 10:28:36 UTC] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='bigquery_to_huggingface' AIRFLOW_CTX_TASK_ID='bigquery_to_gcs' AIRFLOW_CTX_EXECUTION_DATE='2026-04-17T10:28:30.373404+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-17T10:28:30.373404+00:00'
+[2026-04-17, 10:28:36 UTC] {connection.py:269} WARNING - Connection schemes (type: google_cloud_platform) shall not contain '_' according to RFC3986.
+[2026-04-17, 10:28:36 UTC] {base.py:83} INFO - Using connection ID 'google_cloud_default' for task execution.
+[2026-04-17, 10:29:34 UTC] {python.py:202} INFO - Done. Returned value was: gs://mlops_***_99/dataset__647f849e-242b-416a-8cb4-9b71083f1198_*.csv
+[2026-04-17, 10:29:34 UTC] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=bigquery_to_huggingface, task_id=bigquery_to_gcs, execution_date=20260417T102830, start_date=20260417T102836, end_date=20260417T102934
+[2026-04-17, 10:29:34 UTC] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-04-17, 10:29:34 UTC] {taskinstance.py:3312} INFO - 1 downstream tasks scheduled from follow-on schedule check
+
+```
+### Log : register_dataset_to_huggingface
+
+```
+
+95f4b167fafc
+*** Found local files:
+***   * /opt/airflow/logs/dag_id=bigquery_to_huggingface/run_id=manual__2026-04-17T10:28:30.373404+00:00/task_id=register_dataset_to_huggingface/attempt=1.log
+*** !!!! Please make sure that all your Airflow components (e.g. schedulers, webservers, workers and triggerer) have the same 'secret_key' configured in 'webserver' section and time is synchronized on all your machines (for example with ntpd)
+See more at https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#secret-key
+*** Could not read served logs: Client error '403 FORBIDDEN' for url 'http://95f4b167fafc:8793/log/dag_id=bigquery_to_huggingface/run_id=manual__2026-04-17T10:28:30.373404+00:00/task_id=register_dataset_to_huggingface/attempt=1.log'
+For more information check: https://httpstatuses.com/403
+[2026-04-17, 10:29:38 UTC] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bigquery_to_huggingface.register_dataset_to_huggingface manual__2026-04-17T10:28:30.373404+00:00 [queued]>
+[2026-04-17, 10:29:38 UTC] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bigquery_to_huggingface.register_dataset_to_huggingface manual__2026-04-17T10:28:30.373404+00:00 [queued]>
+[2026-04-17, 10:29:38 UTC] {taskinstance.py:2193} INFO - Starting attempt 1 of 1
+[2026-04-17, 10:29:38 UTC] {taskinstance.py:2217} INFO - Executing <Task(_PythonDecoratedOperator): register_dataset_to_huggingface> on 2026-04-17 10:28:30.373404+00:00
+[2026-04-17, 10:29:38 UTC] {standard_task_runner.py:60} INFO - Started process 425 to run task
+[2026-04-17, 10:29:38 UTC] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'bigquery_to_huggingface', 'register_dataset_to_huggingface', 'manual__2026-04-17T10:28:30.373404+00:00', '--job-id', '13', '--raw', '--subdir', 'DAGS_FOLDER/bigquery_to_huggingface.py', '--cfg-path', '/tmp/tmp5utbbupl']
+[2026-04-17, 10:29:38 UTC] {standard_task_runner.py:88} INFO - Job 13: Subtask register_dataset_to_huggingface
+[2026-04-17, 10:29:38 UTC] {task_command.py:423} INFO - Running <TaskInstance: bigquery_to_huggingface.register_dataset_to_huggingface manual__2026-04-17T10:28:30.373404+00:00 [running]> on host 95f4b167fafc
+[2026-04-17, 10:29:39 UTC] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='bigquery_to_huggingface' AIRFLOW_CTX_TASK_ID='register_dataset_to_huggingface' AIRFLOW_CTX_EXECUTION_DATE='2026-04-17T10:28:30.373404+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-17T10:28:30.373404+00:00'
+[2026-04-17, 10:29:40 UTC] {connection.py:269} WARNING - Connection schemes (type: google_cloud_platform) shall not contain '_' according to RFC3986.
+[2026-04-17, 10:29:40 UTC] {base.py:83} INFO - Using connection ID 'google_cloud_default' for task execution.
+
+```
+
 
